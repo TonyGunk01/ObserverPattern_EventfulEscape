@@ -9,13 +9,13 @@ public class LightSwitchView : MonoBehaviour, IInteractable
     private SwitchState currentState;
     public static event Action OnLightSwitchToggled;
 
-    private void OnEnable() => OnLightSwitchToggled += onLightSwitch;
+    private void OnEnable() => UnityEditor.MPE.EventService.Instance.OnLightSwitchToggled.AddListener(onLightSwitch);
 
-    private void OnDisable() => OnLightSwitchToggled -= onLightSwitch;
+    private void OnDisable() => UnityEditor.MPE.EventService.Instance.OnLightSwitchToggled.RemoveListener(onLightSwitch);
 
     private void Start() => currentState = SwitchState.Off;
 
-    public void Interact() => OnLightSwitchToggled?.Invoke();
+    public void Interact() => UnityEditor.MPE.EventService.Instance.OnLightSwitchToggled.InvokeEvent();
 
     private void toggleLights()
     {

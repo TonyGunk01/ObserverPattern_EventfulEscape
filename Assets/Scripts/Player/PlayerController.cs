@@ -14,9 +14,17 @@ public class PlayerController
     private float mouseX;
     private PlayerState playerState;
 
-    public int KeysEquipped { get => playerScriptableObject.KeysEquipped; set => playerScriptableObject.KeysEquipped = value; }
-    public PlayerState PlayerState { get => playerState; private set => playerState = value; }
+    public int KeysEquipped 
+    { 
+        get => playerScriptableObject.KeysEquipped; 
+        set => playerScriptableObject.KeysEquipped = value; 
+    }
 
+    public PlayerState PlayerState 
+    { 
+        get => playerState; 
+        private set => playerState = value; 
+    }
 
     public PlayerController(PlayerView playerView, PlayerScriptableObject playerScriptableObject)
     {
@@ -25,14 +33,15 @@ public class PlayerController
 
         this.playerScriptableObject = playerScriptableObject;
         this.playerScriptableObject.KeysEquipped = 0;
-        LightSwitchView.OnLightSwitchToggled += onLightSwitch;
+        EventService.Instance.OnLightSwitchToggled.AddListener(onLightSwitch);
         playerState = PlayerState.InDark;
     }
 
     ~PlayerController()
     {
-        LightSwitchView.OnLightSwitchToggled -= onLightSwitch;
+        EventService.Instance.OnLightSwitchToggled.RemoveListener(onLightSwitch);
     }
+
     public void Interact() => IsInteracted = Input.GetKeyDown(KeyCode.E) ? true : (Input.GetKeyUp(KeyCode.E) ? false : IsInteracted);
 
     public void Jump(Rigidbody playerRigidbody, Transform transform)
@@ -40,9 +49,7 @@ public class PlayerController
         bool IsGrounded = Physics.Raycast(transform.position, -transform.up, playerScriptableObject.raycastLength);
 
         if (Input.GetKeyDown(KeyCode.Space) && IsGrounded)
-        {
             playerRigidbody.AddForce(Vector3.up * playerScriptableObject.jumpForce, ForceMode.Impulse);
-        }
     }
 
     public void Move(Rigidbody playerRigidbody, Transform transform)
@@ -82,6 +89,7 @@ public class PlayerController
     {
         if (PlayerState == PlayerState.InDark)
             PlayerState = PlayerState.None;
+
         else
             PlayerState = PlayerState.InDark;
     }
