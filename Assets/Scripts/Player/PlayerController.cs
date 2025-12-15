@@ -8,9 +8,11 @@ public class PlayerController
 
     private PlayerView playerView;
     private PlayerScriptableObject playerScriptableObject;
+
     private float velocity;
     private float horizontalAxis;
     private float verticalAxis;
+
     private float mouseX;
     private PlayerState playerState;
 
