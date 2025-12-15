@@ -43,3 +43,5 @@ public class GameUIView : MonoBehaviour
     }
 }
 
+    private void onTryAgainButtonClicked() => SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+}

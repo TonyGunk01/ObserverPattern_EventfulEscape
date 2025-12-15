@@ -8,9 +8,11 @@ public class PlayerController
 
     private PlayerView playerView;
     private PlayerScriptableObject playerScriptableObject;
+
     private float velocity;
     private float horizontalAxis;
     private float verticalAxis;
+
     private float mouseX;
     private PlayerState playerState;
 
@@ -53,9 +55,7 @@ public class PlayerController
         bool IsGrounded = Physics.Raycast(transform.position, -transform.up, playerScriptableObject.raycastLength);
 
         if (Input.GetKeyDown(KeyCode.Space) && IsGrounded)
-        {
             playerRigidbody.AddForce(Vector3.up * playerScriptableObject.jumpForce, ForceMode.Impulse);
-        }
     }
 
     public void Move(Rigidbody playerRigidbody, Transform transform)
