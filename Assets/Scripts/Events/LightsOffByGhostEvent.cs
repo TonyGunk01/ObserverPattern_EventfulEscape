@@ -14,5 +14,4 @@ public class LightsOffByGhostEvent : MonoBehaviour
             this.enabled = false;
         }
     }
-
 }

@@ -14,9 +14,17 @@ public class PlayerController
     private float mouseX;
     private PlayerState playerState;
 
-    public int KeysEquipped { get => playerScriptableObject.KeysEquipped; set => playerScriptableObject.KeysEquipped = value; }
-    public PlayerState PlayerState { get => playerState; private set => playerState = value; }
+    public int KeysEquipped 
+    { 
+        get => playerScriptableObject.KeysEquipped; 
+        set => playerScriptableObject.KeysEquipped = value; 
+    }
 
+    public PlayerState PlayerState 
+    { 
+        get => playerState; 
+        private set => playerState = value; 
+    }
 
     public PlayerController(PlayerView playerView, PlayerScriptableObject playerScriptableObject)
     {
@@ -27,6 +35,7 @@ public class PlayerController
         playerState = PlayerState.InDark;
 
         EventService.Instance.OnLightSwitchToggled.AddListener(onLightSwitch);
+        EventService.Instance.OnLightsOffByGhostEvent.AddListener(onLightsTurnedOffByGhost);
         EventService.Instance.OnKeyPickedUp.AddListener(onKeysPickedUp);
     }
 
@@ -34,7 +43,9 @@ public class PlayerController
     {
         EventService.Instance.OnLightSwitchToggled.RemoveListener(onLightSwitch);
         EventService.Instance.OnKeyPickedUp.RemoveListener(onKeysPickedUp);
+        EventService.Instance.OnLightsOffByGhostEvent.RemoveListener(onLightsTurnedOffByGhost);
     }
+
     public void Interact() => IsInteracted = Input.GetKeyDown(KeyCode.E) ? true : (Input.GetKeyUp(KeyCode.E) ? false : IsInteracted);
 
     public void Jump(Rigidbody playerRigidbody, Transform transform)
@@ -71,6 +82,7 @@ public class PlayerController
         mouseX = Input.GetAxis("Mouse X");
         velocity = Input.GetKey(KeyCode.LeftShift) ? playerScriptableObject.sprintSpeed : playerScriptableObject.walkSpeed;
     }
+
     private void calculatePositionRotation(Rigidbody playerRigidbody, Transform transform, out Quaternion rotation, out Vector3 position)
     {
         Vector3 lookRotation = new Vector3(0, mouseX * playerScriptableObject.sensitivity, 0);
@@ -84,9 +96,13 @@ public class PlayerController
     {
         if (PlayerState == PlayerState.InDark)
             PlayerState = PlayerState.None;
+
         else
             PlayerState = PlayerState.InDark;
     }
+
+    private void onLightsTurnedOffByGhost() => PlayerState = PlayerState.InDark;
+
     private void onKeysPickedUp(int keys)
     {
         KeysEquipped = keys;
