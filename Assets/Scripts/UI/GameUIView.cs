@@ -68,4 +68,3 @@ public class GameUIView : MonoBehaviour
         gameEndPanel.SetActive(true);
     }
 }
-
